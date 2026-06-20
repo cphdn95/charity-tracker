@@ -1,10 +1,10 @@
 "use client";
 import { useState } from "react";
-import Link from "next/link";
 import { CHARITIES } from "@/lib/charities";
 import { Charity } from "@/lib/types";
 import { useDonations } from "@/lib/useDonations";
 import DonationHistory from "@/components/DonationHistory";
+import TabNav from "@/components/TabNav";
 
 const QUICK_AMOUNTS = [10, 25, 50, 100];
 
@@ -83,33 +83,15 @@ export default function Home() {
 
   return (
     <div className="min-h-screen">
-      <header className="border-b border-gray-800 bg-gray-900/60 sticky top-0 z-10 backdrop-blur">
-        <div className="max-w-6xl mx-auto px-4 py-4 flex items-start justify-between gap-4">
-          <div>
-            <h1 className="text-xl font-bold flex items-center gap-2">
-              <span>💛</span> Charity Pledge
-            </h1>
-            <p className="text-sm text-gray-400 mt-0.5 max-w-xl">
-              Promise a donation to a charity — no money is charged now, you&apos;re
-              pledging to pay later. Share this link and pledges show up here live.
-            </p>
-          </div>
-          <nav className="flex gap-2 shrink-0">
-            <Link
-              href="/presenter"
-              className="text-xs px-3 py-1.5 rounded-lg border border-gray-700 text-gray-300 hover:border-gray-500 hover:text-white transition-colors"
-            >
-              Presenter
-            </Link>
-            <Link
-              href="/admin"
-              className="text-xs px-3 py-1.5 rounded-lg border border-gray-700 text-gray-300 hover:border-gray-500 hover:text-white transition-colors"
-            >
-              Admin
-            </Link>
-          </nav>
+      <TabNav />
+      <div className="border-b border-gray-800 bg-gray-900/40">
+        <div className="max-w-6xl mx-auto px-4 py-3">
+          <p className="text-sm text-gray-400 max-w-xl">
+            Promise a donation to a charity — no money is charged now, you&apos;re
+            pledging to pay later. Share this link and pledges show up here live.
+          </p>
         </div>
-      </header>
+      </div>
 
       <main className="max-w-6xl mx-auto px-4 py-6 grid grid-cols-1 lg:grid-cols-[1fr_340px] gap-6">
         {/* Donation view */}

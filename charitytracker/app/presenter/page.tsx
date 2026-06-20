@@ -1,6 +1,6 @@
 "use client";
-import Link from "next/link";
 import { CHARITIES } from "@/lib/charities";
+import TabNav from "@/components/TabNav";
 import { useDonations } from "@/lib/useDonations";
 import { Donation } from "@/lib/types";
 
@@ -35,14 +35,13 @@ export default function Presenter() {
 
   return (
     <div className="min-h-screen flex flex-col">
+      <TabNav />
       {/* Header with running total */}
       <header className="border-b border-gray-800 px-8 py-6 flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <span className="text-3xl">💛</span>
-          <h1 className="text-2xl font-bold">Charity Pledge</h1>
-          <span className="flex items-center gap-1.5 text-sm text-gray-400 ml-2">
-            <span className="w-2.5 h-2.5 rounded-full bg-green-500 animate-pulse" />
-            Live
+          <span className="flex items-center gap-2 text-lg text-gray-300">
+            <span className="w-3 h-3 rounded-full bg-green-500 animate-pulse" />
+            Live donations
           </span>
         </div>
         <div className="text-right">
@@ -199,12 +198,6 @@ export default function Presenter() {
           </section>
         </div>
       </main>
-
-      <footer className="px-8 py-3 text-center">
-        <Link href="/" className="text-xs text-gray-600 hover:text-gray-400">
-          ← Back to donation page
-        </Link>
-      </footer>
     </div>
   );
 }
