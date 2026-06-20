@@ -1,7 +1,9 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import Link from "next/link";
 import { CHARITIES } from "@/lib/charities";
-import { Charity, DonationsPayload } from "@/lib/types";
+import { Charity } from "@/lib/types";
+import { useDonations } from "@/lib/useDonations";
 import DonationHistory from "@/components/DonationHistory";
 
 const QUICK_AMOUNTS = [10, 25, 50, 100];
@@ -34,11 +36,8 @@ const ACCENT: Record<
   },
 };
 
-const EMPTY: DonationsPayload = { donations: [], totals: {}, grandTotal: 0 };
-
 export default function Home() {
-  const [data, setData] = useState<DonationsPayload>(EMPTY);
-  const [connected, setConnected] = useState(false);
+  const { data, refresh } = useDonations();
 
   const [charityId, setCharityId] = useState<string>(CHARITIES[0].id);
   const [donor, setDonor] = useState("");
@@ -49,42 +48,6 @@ export default function Home() {
 
   const selected = CHARITIES.find((c) => c.id === charityId) ?? CHARITIES[0];
   const accent = ACCENT[selected.accent];
-
-  // Initial load.
-  useEffect(() => {
-    fetch("/api/donations")
-      .then((r) => r.json())
-      .then((d: DonationsPayload) => setData(d))
-      .catch(() => {});
-  }, []);
-
-  // Live updates over Server-Sent Events. Reconnects automatically.
-  useEffect(() => {
-    let es: EventSource;
-    let retry: ReturnType<typeof setTimeout>;
-
-    function connect() {
-      es = new EventSource("/api/events");
-      es.onopen = () => setConnected(true);
-      es.onmessage = (event) => {
-        try {
-          const msg = JSON.parse(event.data);
-          if (msg.type === "donation_update") setData(msg.payload);
-        } catch {}
-      };
-      es.onerror = () => {
-        setConnected(false);
-        es.close();
-        retry = setTimeout(connect, 3000);
-      };
-    }
-
-    connect();
-    return () => {
-      es?.close();
-      clearTimeout(retry);
-    };
-  }, []);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -107,15 +70,10 @@ export default function Home() {
         setError(body.error || "Something went wrong.");
         return;
       }
-      // SSE will push the new history; just reset the amount and flash a thanks.
       setAmount("");
       setJustGave(true);
       setTimeout(() => setJustGave(false), 2500);
-      // Optimistic fallback in case this client's SSE is momentarily down.
-      if (!connected) {
-        const fresh = await fetch("/api/donations").then((r) => r.json());
-        setData(fresh);
-      }
+      refresh(); // show it immediately rather than waiting for the next poll
     } catch {
       setError("Network error — please try again.");
     } finally {
@@ -126,14 +84,30 @@ export default function Home() {
   return (
     <div className="min-h-screen">
       <header className="border-b border-gray-800 bg-gray-900/60 sticky top-0 z-10 backdrop-blur">
-        <div className="max-w-6xl mx-auto px-4 py-4">
-          <h1 className="text-xl font-bold flex items-center gap-2">
-            <span>💛</span> Charity Pledge
-          </h1>
-          <p className="text-sm text-gray-400 mt-0.5">
-            Promise a donation to a charity — no money is charged now, you&apos;re
-            pledging to pay later. Share this link and pledges show up here live.
-          </p>
+        <div className="max-w-6xl mx-auto px-4 py-4 flex items-start justify-between gap-4">
+          <div>
+            <h1 className="text-xl font-bold flex items-center gap-2">
+              <span>💛</span> Charity Pledge
+            </h1>
+            <p className="text-sm text-gray-400 mt-0.5 max-w-xl">
+              Promise a donation to a charity — no money is charged now, you&apos;re
+              pledging to pay later. Share this link and pledges show up here live.
+            </p>
+          </div>
+          <nav className="flex gap-2 shrink-0">
+            <Link
+              href="/presenter"
+              className="text-xs px-3 py-1.5 rounded-lg border border-gray-700 text-gray-300 hover:border-gray-500 hover:text-white transition-colors"
+            >
+              Presenter
+            </Link>
+            <Link
+              href="/admin"
+              className="text-xs px-3 py-1.5 rounded-lg border border-gray-700 text-gray-300 hover:border-gray-500 hover:text-white transition-colors"
+            >
+              Admin
+            </Link>
+          </nav>
         </div>
       </header>
 
@@ -153,9 +127,7 @@ export default function Home() {
                   type="button"
                   onClick={() => setCharityId(c.id)}
                   className={`text-left rounded-xl border p-4 transition-colors ${
-                    isSel
-                      ? a.selected
-                      : `border-gray-800 bg-gray-900 ${a.ring}`
+                    isSel ? a.selected : `border-gray-800 bg-gray-900 ${a.ring}`
                   }`}
                 >
                   <div className="flex items-center gap-2">
@@ -183,9 +155,7 @@ export default function Home() {
               <span className={accent.text}>{selected.name}</span>
             </h2>
 
-            <label className="block text-sm text-gray-300 mb-1.5">
-              Your name
-            </label>
+            <label className="block text-sm text-gray-300 mb-1.5">Your name</label>
             <input
               value={donor}
               onChange={(e) => setDonor(e.target.value)}
@@ -219,18 +189,14 @@ export default function Home() {
               </span>
               <input
                 value={amount}
-                onChange={(e) =>
-                  setAmount(e.target.value.replace(/[^0-9.]/g, ""))
-                }
+                onChange={(e) => setAmount(e.target.value.replace(/[^0-9.]/g, ""))}
                 inputMode="decimal"
                 placeholder="50"
                 className="w-full rounded-lg bg-gray-950 border border-gray-700 pl-7 pr-3 py-2.5 outline-none focus:border-gray-500"
               />
             </div>
 
-            {error && (
-              <div className="text-sm text-red-400 mb-3">{error}</div>
-            )}
+            {error && <div className="text-sm text-red-400 mb-3">{error}</div>}
             {justGave && (
               <div className="text-sm text-green-400 mb-3">
                 Thanks for your pledge! 💛
@@ -244,7 +210,9 @@ export default function Home() {
             >
               {submitting
                 ? "Pledging…"
-                : `Pledge${amount ? ` $${Number(amount).toLocaleString()}` : ""} to ${selected.name}`}
+                : `Pledge${
+                    amount ? ` $${Number(amount).toLocaleString()}` : ""
+                  } to ${selected.name}`}
             </button>
             <p className="text-[11px] text-gray-500 mt-3 text-center">
               This is a promise to donate — nothing is charged.
@@ -258,7 +226,6 @@ export default function Home() {
             <DonationHistory
               donations={data.donations}
               grandTotal={data.grandTotal}
-              connected={connected}
             />
           </div>
         </aside>

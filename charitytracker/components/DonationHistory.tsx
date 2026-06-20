@@ -4,7 +4,6 @@ import { Donation } from "@/lib/types";
 interface Props {
   donations: Donation[];
   grandTotal: number;
-  connected: boolean;
 }
 
 // Charity id -> dot color. Listed literally so Tailwind generates the classes.
@@ -26,11 +25,7 @@ function timeAgo(iso: string): string {
   return `${d}d ago`;
 }
 
-export default function DonationHistory({
-  donations,
-  grandTotal,
-  connected,
-}: Props) {
+export default function DonationHistory({ donations, grandTotal }: Props) {
   return (
     <div className="flex flex-col h-full">
       <div className="flex items-center justify-between mb-3">
@@ -38,15 +33,11 @@ export default function DonationHistory({
           Donation History
         </h2>
         <span
-          title={connected ? "Live updates active" : "Reconnecting…"}
+          title="Updates automatically"
           className="flex items-center gap-1.5 text-xs text-gray-500"
         >
-          <span
-            className={`w-2 h-2 rounded-full ${
-              connected ? "bg-green-500" : "bg-yellow-500 animate-pulse"
-            }`}
-          />
-          {connected ? "Live" : "…"}
+          <span className="w-2 h-2 rounded-full bg-green-500" />
+          Live
         </span>
       </div>
 
