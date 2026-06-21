@@ -18,7 +18,7 @@ export default function TabNav() {
         <div className="flex items-center">
           <span className="font-bold mr-4 flex items-center gap-2 whitespace-nowrap">
             <span>💛</span>
-            <span className="hidden sm:inline">Charity Pledge</span>
+            <span className="hidden sm:inline">Grace's Birthday Charities</span>
           </span>
           <nav className="flex items-center">
             {TABS.map((t) => {
