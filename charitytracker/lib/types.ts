@@ -2,7 +2,7 @@ export interface Charity {
   id: string;
   name: string;
   blurb: string;
-  // Tailwind color name used to accent this charity's UI.
+  url?: string;  // Tailwind color name used to accent this charity's UI.
   accent: "emerald" | "blue" | "purple" | "amber" | "rose" | "cyan";
 }
 
