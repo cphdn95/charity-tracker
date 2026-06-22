@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Grace's Birthday Charities",
+  title: "Grace's 50th Charities",
   description:
     "Pledge a donation to one of three charities and watch the giving roll in live.",
 };
