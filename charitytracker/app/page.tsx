@@ -45,7 +45,7 @@ export default function Home() {
       setAmount("");
       setJustGave(true);
       setTimeout(() => setJustGave(false), 2500);
-      refresh(); // show it immediately rather than waiting for the next poll
+      refresh();
     } catch {
       setError("Network error — please try again.");
     } finally {
@@ -66,7 +66,6 @@ export default function Home() {
       </div>
 
       <main className="max-w-6xl mx-auto px-4 py-6 grid grid-cols-1 lg:grid-cols-[1fr_340px] gap-6">
-        {/* Donation view */}
         <section>
           <h2 className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-3">
             Choose a charity
@@ -76,26 +75,46 @@ export default function Home() {
               const a = ACCENT_CLASSES[c.accent];
               const isSel = c.id === charityId;
               return (
-                <button
+                <div
                   key={c.id}
-                  type="button"
-                  onClick={() => setCharityId(c.id)}
-                  className={`text-left rounded-xl border p-4 transition-colors ${
+                  className={`flex flex-col rounded-xl border p-4 transition-colors ${
                     isSel ? a.selected : `border-gray-800 bg-gray-900 ${a.ring}`
                   }`}
                 >
-                  <div className="flex items-center gap-2">
-                    <span className={`w-2.5 h-2.5 rounded-full ${a.dot}`} />
-                    <span className="font-semibold">{c.name}</span>
-                  </div>
-                  <p className="text-xs text-gray-400 mt-1.5">{c.blurb}</p>
-                  <div className={`mt-3 text-lg font-bold ${a.text}`}>
-                    ${(data.totals[c.id] || 0).toLocaleString()}
-                  </div>
-                  <div className="text-[11px] text-gray-500 uppercase tracking-wider">
-                    pledged
-                  </div>
-                </button>
+                  <button
+                    type="button"
+                    onClick={() => setCharityId(c.id)}
+                    className="text-left"
+                  >
+                    <div className="flex items-center gap-2">
+                      <span className={`w-2.5 h-2.5 rounded-full ${a.dot}`} />
+                      <span className="font-semibold">{c.name}</span>
+                    </div>
+                    <p className="text-xs text-gray-400 mt-1.5">{c.blurb}</p>
+                  </button>
+                  {c.url && (
+                    <a
+                      href={c.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={`mt-2 inline-block text-xs ${a.text} hover:underline`}
+                    >
+                      Visit website ↗
+                    </a>
+                  )}
+                  <button
+                    type="button"
+                    onClick={() => setCharityId(c.id)}
+                    className="text-left mt-auto pt-3"
+                  >
+                    <div className={`text-lg font-bold ${a.text}`}>
+                      ${(data.totals[c.id] || 0).toLocaleString()}
+                    </div>
+                    <div className="text-[11px] text-gray-500 uppercase tracking-wider">
+                      pledged
+                    </div>
+                  </button>
+                </div>
               );
             })}
           </div>
@@ -174,7 +193,6 @@ export default function Home() {
           </form>
         </section>
 
-        {/* Live history sidebar */}
         <aside className="lg:sticky lg:top-24 h-fit">
           <div className="rounded-xl border border-gray-800 bg-gray-900 p-4 lg:h-[calc(100vh-8rem)]">
             <DonationHistory
