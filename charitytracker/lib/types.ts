@@ -3,7 +3,7 @@ export interface Charity {
   name: string;
   blurb: string;
   // Tailwind color name used to accent this charity's UI.
-  accent: "emerald" | "blue" | "purple";
+  accent: "emerald" | "blue" | "purple" | "amber" | "rose" | "cyan";
 }
 
 export interface Donation {

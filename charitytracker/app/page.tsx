@@ -1,40 +1,12 @@
 "use client";
 import { useState } from "react";
 import { CHARITIES } from "@/lib/charities";
-import { Charity } from "@/lib/types";
+import { ACCENT_CLASSES } from "@/lib/colors";
 import { useDonations } from "@/lib/useDonations";
 import DonationHistory from "@/components/DonationHistory";
 import TabNav from "@/components/TabNav";
 
 const QUICK_AMOUNTS = [10, 25, 50, 100];
-
-// Per-accent class strings, written out literally so Tailwind generates them.
-const ACCENT: Record<
-  Charity["accent"],
-  { ring: string; selected: string; text: string; button: string; dot: string }
-> = {
-  emerald: {
-    ring: "hover:border-emerald-500",
-    selected: "border-emerald-500 bg-emerald-500/10",
-    text: "text-emerald-400",
-    button: "bg-emerald-600 hover:bg-emerald-500",
-    dot: "bg-emerald-500",
-  },
-  blue: {
-    ring: "hover:border-blue-500",
-    selected: "border-blue-500 bg-blue-500/10",
-    text: "text-blue-400",
-    button: "bg-blue-600 hover:bg-blue-500",
-    dot: "bg-blue-500",
-  },
-  purple: {
-    ring: "hover:border-purple-500",
-    selected: "border-purple-500 bg-purple-500/10",
-    text: "text-purple-400",
-    button: "bg-purple-600 hover:bg-purple-500",
-    dot: "bg-purple-500",
-  },
-};
 
 export default function Home() {
   const { data, refresh } = useDonations();
@@ -47,7 +19,7 @@ export default function Home() {
   const [justGave, setJustGave] = useState(false);
 
   const selected = CHARITIES.find((c) => c.id === charityId) ?? CHARITIES[0];
-  const accent = ACCENT[selected.accent];
+  const accent = ACCENT_CLASSES[selected.accent];
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -101,7 +73,7 @@ export default function Home() {
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-6">
             {CHARITIES.map((c) => {
-              const a = ACCENT[c.accent];
+              const a = ACCENT_CLASSES[c.accent];
               const isSel = c.id === charityId;
               return (
                 <button

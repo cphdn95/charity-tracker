@@ -1,15 +1,9 @@
 "use client";
 import { CHARITIES } from "@/lib/charities";
+import { classesForCharity } from "@/lib/colors";
 import TabNav from "@/components/TabNav";
 import { useDonations } from "@/lib/useDonations";
 import { Donation } from "@/lib/types";
-
-// Charity id -> color classes, written literally for Tailwind.
-const COLOR: Record<string, { dot: string; text: string; bar: string }> = {
-  "charity-one": { dot: "bg-emerald-500", text: "text-emerald-400", bar: "bg-emerald-500" },
-  "charity-two": { dot: "bg-blue-500", text: "text-blue-400", bar: "bg-blue-500" },
-  "charity-three": { dot: "bg-purple-500", text: "text-purple-400", bar: "bg-purple-500" },
-};
 
 function money(n: number) {
   return `$${n.toLocaleString()}`;
@@ -72,12 +66,12 @@ export default function Presenter() {
                   </div>
                   <div
                     className={`flex items-center gap-2 text-xl ${
-                      COLOR[mostRecent.charityId]?.text || "text-gray-300"
+                      classesForCharity(mostRecent.charityId).text
                     }`}
                   >
                     <span
                       className={`w-3 h-3 rounded-full ${
-                        COLOR[mostRecent.charityId]?.dot || "bg-gray-500"
+                        classesForCharity(mostRecent.charityId).dot
                       }`}
                     />
                     {mostRecent.charityName}
@@ -105,7 +99,7 @@ export default function Presenter() {
               {CHARITIES.map((c) => {
                 const total = totals[c.id] || 0;
                 const pct = Math.round((total / maxTotal) * 100);
-                const color = COLOR[c.id];
+                const color = classesForCharity(c.id);
                 return (
                   <div key={c.id}>
                     <div className="flex items-center justify-between mb-1.5">
@@ -177,7 +171,7 @@ export default function Presenter() {
                       <span className="flex items-center gap-2 min-w-0">
                         <span
                           className={`w-2 h-2 rounded-full shrink-0 ${
-                            COLOR[d.charityId]?.dot || "bg-gray-500"
+                            classesForCharity(d.charityId).dot
                           }`}
                         />
                         <span className="truncate">
