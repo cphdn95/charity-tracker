@@ -165,8 +165,7 @@ export default function Presenter() {
             <div className="text-xs uppercase tracking-widest text-gray-500 mb-4">
               Donation history
             </div>
-            <div className="flex-1 overflow-y-auto -mr-2 pr-2 min-h-0">
-              {donations.length === 0 ? (
+            <div className="flex-1 overflow-y-auto -mr-2 pr-2 min-h-0 max-h-[50vh]">              {donations.length === 0 ? (
                 <div className="text-gray-600">No donations yet.</div>
               ) : (
                 <ul className="flex flex-col gap-2">
