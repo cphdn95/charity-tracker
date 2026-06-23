@@ -78,7 +78,6 @@ export default function Presenter() {
               <>
                 {/* Leader */}
                 <div className="mb-6">
-                  <div className="text-sm text-gray-500 mb-1">🥇 Leading donor</div>
                   <div className="text-5xl font-extrabold break-words">
                     {leader.donor}
                   </div>
