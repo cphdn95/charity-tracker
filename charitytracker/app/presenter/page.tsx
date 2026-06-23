@@ -24,8 +24,15 @@ export default function Presenter() {
   const { donations, totals, grandTotal } = data;
 
   const mostRecent: Donation | undefined = donations[0];
-  const topDonations = [...donations].sort((a, b) => b.amount - a.amount).slice(0, 5);
-  const maxTotal = Math.max(1, ...CHARITIES.map((c) => totals[c.id] || 0));
+  // Top donors: sum each person's pledges, ranked by their combined total.
+  const donorTotals = new Map<string, number>();
+  for (const d of donations) {
+    donorTotals.set(d.donor, (donorTotals.get(d.donor) || 0) + d.amount);
+  }
+  const topDonors = [...donorTotals.entries()]
+    .map(([donor, total]) => ({ donor, total }))
+    .sort((a, b) => b.total - a.total)
+    .slice(0, 5);  const maxTotal = Math.max(1, ...CHARITIES.map((c) => totals[c.id] || 0));
 
   return (
     <div className="min-h-screen flex flex-col">
