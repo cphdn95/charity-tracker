@@ -64,6 +64,12 @@ export async function POST(request: NextRequest) {
         { status: 400 }
       );
     }
+    if (amount < 50) {
+      return NextResponse.json(
+        { error: "The minimum pledge is $50." },
+        { status: 400 }
+      );
+    }
     if (!hasDatabase() && process.env.VERCEL) {
       return NextResponse.json(
         {
