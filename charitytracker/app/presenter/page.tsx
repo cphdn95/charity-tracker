@@ -132,28 +132,23 @@ export default function Presenter() {
         </div>
 
         {/* Top donations + full history */}
-        <div className="flex flex-col gap-6 min-h-0">
-          <section className="rounded-2xl border border-gray-800 bg-gray-900 p-6">
-            <div className="text-xs uppercase tracking-widest text-gray-500 mb-4">
-              🏆 Top donations
+                    <div className="text-xs uppercase tracking-widest text-gray-500 mb-4">
+              🏆 Top donors
             </div>
-            {topDonations.length === 0 ? (
+            {topDonors.length === 0 ? (
               <div className="text-gray-600">No donations yet.</div>
             ) : (
               <ol className="flex flex-col gap-3">
-                {topDonations.map((d, i) => (
-                  <li key={d.id} className="flex items-center gap-3">
+                {topDonors.map((d, i) => (
+                  <li key={d.donor} className="flex items-center gap-3">
                     <span className="w-6 text-center text-lg font-bold text-gray-500">
                       {i + 1}
                     </span>
-                    <span className="flex-1 min-w-0">
-                      <span className="block font-semibold truncate">{d.donor}</span>
-                      <span className="block text-xs text-gray-500 truncate">
-                        {d.charityName}
-                      </span>
+                    <span className="flex-1 min-w-0 font-semibold truncate">
+                      {d.donor}
                     </span>
                     <span className="font-bold text-green-400 tabular-nums">
-                      {money(d.amount)}
+                      {money(d.total)}
                     </span>
                   </li>
                 ))}
