@@ -261,8 +261,7 @@ export default function Home() {
             </section>
 
             <aside className="lg:sticky lg:top-24 h-fit">
-              <div className="rounded-xl border border-gray-800 bg-gray-900 p-4 lg:h-[calc(100vh-8rem)]">
-                <DonationHistory
+              <div className="rounded-xl border border-gray-800 bg-gray-900 p-4 h-[60vh] lg:h-[calc(100vh-8rem)]">                <DonationHistory
                   donations={data.donations}
                   grandTotal={data.grandTotal}
                 />
