@@ -24,6 +24,7 @@ export default function Presenter() {
   const { donations, totals, grandTotal } = data;
 
   const mostRecent: Donation | undefined = donations[0];
+
   // Top donors: sum each person's pledges, ranked by their combined total.
   const donorTotals = new Map<string, number>();
   for (const d of donations) {
@@ -32,7 +33,9 @@ export default function Presenter() {
   const topDonors = [...donorTotals.entries()]
     .map(([donor, total]) => ({ donor, total }))
     .sort((a, b) => b.total - a.total)
-    .slice(0, 5);  const maxTotal = Math.max(1, ...CHARITIES.map((c) => totals[c.id] || 0));
+    .slice(0, 5);
+
+  const maxTotal = Math.max(1, ...CHARITIES.map((c) => totals[c.id] || 0));
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -131,8 +134,10 @@ export default function Presenter() {
           </section>
         </div>
 
-        {/* Top donations + full history */}
-                    <div className="text-xs uppercase tracking-widest text-gray-500 mb-4">
+        {/* Top donors + full history */}
+        <div className="flex flex-col gap-6 min-h-0">
+          <section className="rounded-2xl border border-gray-800 bg-gray-900 p-6">
+            <div className="text-xs uppercase tracking-widest text-gray-500 mb-4">
               🏆 Top donors
             </div>
             {topDonors.length === 0 ? (
