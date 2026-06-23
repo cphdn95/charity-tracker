@@ -6,7 +6,8 @@ import { useDonations } from "@/lib/useDonations";
 import DonationHistory from "@/components/DonationHistory";
 import TabNav from "@/components/TabNav";
 
-const QUICK_AMOUNTS = [10, 25, 50, 100];
+const QUICK_AMOUNTS = [50, 100, 200];
+const MIN_PLEDGE = 50;
 
 export default function Home() {
   const { data, refresh } = useDonations();
@@ -27,8 +28,8 @@ export default function Home() {
 
     const amt = Number(amount);
     if (!donor.trim()) return setError("Please enter your name.");
-    if (!Number.isFinite(amt) || amt <= 0)
-      return setError("Please enter an amount greater than $0.");
+    if (!Number.isFinite(amt) || amt < MIN_PLEDGE)
+      return setError(`The minimum pledge is $${MIN_PLEDGE}.`);
 
     setSubmitting(true);
     try {
@@ -77,31 +78,32 @@ export default function Home() {
               return (
                 <div
                   key={c.id}
-                  className={`flex flex-col rounded-xl border p-4 transition-colors ${
+                  className={`relative flex flex-col rounded-xl border p-4 transition-colors ${
                     isSel ? a.selected : `border-gray-800 bg-gray-900 ${a.ring}`
                   }`}
                 >
-                  <button
-                    type="button"
-                    onClick={() => setCharityId(c.id)}
-                    className="text-left"
-                  >
-                    <div className="flex items-center gap-2">
-                      <span className={`w-2.5 h-2.5 rounded-full ${a.dot}`} />
-                      <span className="font-semibold">{c.name}</span>
-                    </div>
-                    <p className="text-xs text-gray-400 mt-1.5">{c.blurb}</p>
-                  </button>
                   {c.url && (
                     <a
                       href={c.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className={`mt-2 inline-block text-xs ${a.text} hover:underline`}
+                      onClick={(e) => e.stopPropagation()}
+                      className={`absolute top-2 right-2 z-10 text-[11px] font-medium ${a.text} hover:underline px-1.5 py-0.5`}
                     >
-                      Visit website ↗
+                      Website ↗
                     </a>
                   )}
+                  <button
+                    type="button"
+                    onClick={() => setCharityId(c.id)}
+                    className="text-left"
+                  >
+                    <div className="flex items-center gap-2 pr-16">
+                      <span className={`w-2.5 h-2.5 rounded-full ${a.dot}`} />
+                      <span className="font-semibold">{c.name}</span>
+                    </div>
+                    <p className="text-xs text-gray-400 mt-1.5">{c.blurb}</p>
+                  </button>
                   <button
                     type="button"
                     onClick={() => setCharityId(c.id)}
@@ -138,7 +140,7 @@ export default function Home() {
             />
 
             <label className="block text-sm text-gray-300 mb-1.5">
-              Amount (USD)
+              Amount (USD) — minimum $50
             </label>
             <div className="flex flex-wrap gap-2 mb-3">
               {QUICK_AMOUNTS.map((q) => (
