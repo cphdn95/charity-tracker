@@ -88,6 +88,7 @@ export default function Home() {
       <TabNav />
 
       {!donorName ? (
+        // Name gate — shown until the visitor tells us who they are.
         <div className="flex items-center justify-center px-4 py-16">
           <form
             onSubmit={confirmName}
@@ -131,7 +132,7 @@ export default function Home() {
               <h2 className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-3">
                 Choose a charity
               </h2>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6">
                 {CHARITIES.map((c) => {
                   const a = ACCENT_CLASSES[c.accent];
                   const isSel = c.id === charityId;
@@ -261,7 +262,8 @@ export default function Home() {
             </section>
 
             <aside className="lg:sticky lg:top-24 h-fit">
-              <div className="rounded-xl border border-gray-800 bg-gray-900 p-4 h-[60vh] lg:h-[calc(100vh-8rem)]">                <DonationHistory
+              <div className="rounded-xl border border-gray-800 bg-gray-900 p-4 h-[60vh] lg:h-[calc(100vh-8rem)]">
+                <DonationHistory
                   donations={data.donations}
                   grandTotal={data.grandTotal}
                 />

@@ -1,17 +1,11 @@
 "use client";
 import { Donation } from "@/lib/types";
+import { classesForCharity } from "@/lib/colors";
 
 interface Props {
   donations: Donation[];
   grandTotal: number;
 }
-
-// Charity id -> dot color. Listed literally so Tailwind generates the classes.
-const DOT: Record<string, string> = {
-  "charity-one": "bg-emerald-500",
-  "charity-two": "bg-blue-500",
-  "charity-three": "bg-purple-500",
-};
 
 function timeAgo(iso: string): string {
   const diff = Date.now() - new Date(iso).getTime();
@@ -77,7 +71,7 @@ export default function DonationHistory({ donations, grandTotal }: Props) {
                   <span className="flex items-center gap-1.5 text-xs text-gray-400 truncate">
                     <span
                       className={`w-2 h-2 rounded-full shrink-0 ${
-                        DOT[d.charityId] || "bg-gray-500"
+                        classesForCharity(d.charityId).dot
                       }`}
                     />
                     {d.charityName}

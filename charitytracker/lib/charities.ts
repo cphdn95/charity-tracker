@@ -21,30 +21,20 @@ export const CHARITIES: Charity[] = [
     accent: "rose",
   },
   {
-    id: "charity-three",
-    name: "Camp Via West",
+    id: "bay-area-rescue",
+    name: "Bay Area Rescue Mission",
     blurb:
-      "A nonprofit camp focusing on allowing people of all abilities to live their fullest and most joyful lives.",
-    url: "https://campviawest.org/",
+      "A nonprofit organization that offers help and healing to the homeless in the Bay Area by providing adequate needs like meals and shelter.",
+    url: "https://www.bayarearescue.org/",
     accent: "blue",
   },
   {
-    id: "charity-four",
-    name: "Charity X",
-    blurb: "To be announced.",
-    accent: "amber",
-  },
-  {
-    id: "charity-five",
-    name: "Charity Y",
-    blurb: "To be announced.",
+    id: "autism-society-sf",
+    name: "Autism Society San Francisco",
+    blurb:
+      "A nonprofit organization that focuses on community outreach, policy advocacy, educational networking, and expanding lifelong care options for autistic adults.",
+    url: "https://sfautismsociety.org/",
     accent: "purple",
-  },
-  {
-    id: "charity-six",
-    name: "Charity Z",
-    blurb: "To be announced.",
-    accent: "cyan",
   },
 ];
 
