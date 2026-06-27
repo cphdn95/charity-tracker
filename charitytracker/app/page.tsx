@@ -95,13 +95,16 @@ export default function Home() {
             className="w-full max-w-sm rounded-2xl border border-gray-800 bg-gray-900 p-6"
           >
             <h2 className="text-lg font-bold mb-1">Welcome! 🎉</h2>
-            <p className="text-sm text-gray-400 mb-5">
-              Enter your name to start pledging.
+              <p className="text-sm text-gray-400 mb-5">
+              Enter your first and last name to start pledging.
             </p>
+            <label className="block text-sm text-gray-300 mb-1.5">
+              Your name (first and last)
+            </label>
             <input
               value={nameInput}
               onChange={(e) => setNameInput(e.target.value)}
-              placeholder="Your name"
+              placeholder="e.g. Alex Smith"
               maxLength={60}
               autoFocus
               className="w-full rounded-lg bg-gray-950 border border-gray-700 px-3 py-2.5 mb-3 outline-none focus:border-gray-500"
