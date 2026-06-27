@@ -36,6 +36,14 @@ export const CHARITIES: Charity[] = [
     url: "https://sfautismsociety.org/",
     accent: "purple",
   },
+  {
+    id: "american-cancer-society",
+    name: "American Cancer Society",
+    blurb:
+      "Improving the lives of people with cancer and their families through advocacy, research, and patient support — so everyone can prevent, detect, treat, and survive cancer.",
+    url: "https://www.cancer.org/",
+    accent: "amber",
+  },
 ];
 
 export function getCharity(id: string): Charity | undefined {
